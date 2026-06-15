@@ -3,29 +3,21 @@
 
 return {
   {
-    "neovim/nvim-lspconfig",
-    opts = function()
-      -- Register Expert as a custom lspconfig server
-      local configs = require "lspconfig.configs"
-      local util = require "lspconfig.util"
-
-      if not configs.expert then
-        configs.expert = {
-          default_config = {
-            cmd = { vim.fn.expand "~/.local/bin/expert", "--stdio" },
-            filetypes = { "elixir", "eelixir", "heex" },
-            root_dir = util.root_pattern("mix.exs", ".git"),
-            settings = {},
-          },
-        }
-      end
-
-      -- Set up Expert directly
-      require("lspconfig").expert.setup {
-        capabilities = require("astrolsp").config.capabilities,
-        on_attach = require("astrolsp").on_attach,
-      }
-    end,
+    -- Register Expert via the AstroNvim v6 `vim.lsp.config` API.
+    -- AstroLSP applies capabilities/on_attach automatically and enables
+    -- everything listed in `servers`.
+    "AstroNvim/astrolsp",
+    ---@type AstroLSPOpts
+    opts = {
+      config = {
+        expert = {
+          cmd = { vim.fn.expand "~/.local/bin/expert", "--stdio" },
+          filetypes = { "elixir", "eelixir", "heex" },
+          root_markers = { "mix.exs", ".git" },
+        },
+      },
+      servers = { "expert" },
+    },
   },
   {
     "AstroNvim/astrocore",
@@ -49,7 +41,7 @@ return {
             vim.fn.jobstart(cmd, {
               on_exit = function(_, exit_code)
                 if exit_code == 0 then
-                  vim.notify("Expert updated successfully! Restart LSP with :LspRestart", vim.log.levels.INFO)
+                  vim.notify("Expert updated successfully! Restart LSP with :lsp restart", vim.log.levels.INFO)
                 else
                   vim.notify("Expert update failed. Check if gh CLI is installed and authenticated.", vim.log.levels.ERROR)
                 end
