@@ -6,15 +6,16 @@
 ---@type LazySpec
 return {
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
-    opts = { style = "storm" },
+    opts = { flavour = "mocha" },
   },
   {
     "AstroNvim/astroui",
     ---@type AstroUIOpts
     opts = {
-      colorscheme = "tokyonight-storm",
+      colorscheme = "catppuccin",
     -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
     highlights = {
       init = { -- this table overrides highlights in all themes
